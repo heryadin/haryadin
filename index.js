@@ -1,5 +1,8 @@
+__path = process.cwd()
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const createError = require('http-errors');
 const app = express();
 
 app.set('json spaces', 2)
@@ -9,22 +12,23 @@ app.use(express.static('assets'))
 
 
 app.get('/', (req, res) => {
-    res.status(200).sendFile('./views/index.html')
-})
+    res.sendFile(__path + '/public/index.html')
+	})
 
 
 // Handling 404
-app.use(function (req, res, next) {
-    res.status(404).json({
-        status: false,
-        message: "Page not found"
-    })
-})
-
 app.get('/hello', (req, res) => {
   res.send('Hello, World!');
 });
 
+// App use error 404
+app.use(function (req, res, next) {
+	next(createError(404))
+	})
+	
+app.use(function (err, req, res, next) {
+	res.sendFile(__path + '/public/404.html')
+	})
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
 });
