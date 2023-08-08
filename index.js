@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 app.set('json spaces', 2)
@@ -14,13 +15,16 @@ app.get('/', (req, res) => {
 
 // Handling 404
 app.use(function (req, res, next) {
-    res.status(404).sendFile('./views/index.html')
+    res.status(404).json({
+        status: false,
+        message: "Page not found"
+    })
 })
 
-app.get('/test', (req, res) => {
+app.get('/hello', (req, res) => {
   res.send('Hello, World!');
 });
 
 app.listen(3000, () => {
-  console.log('Server active port 3000 ✓');
+  console.log('Server is listening on port 3000');
 });
